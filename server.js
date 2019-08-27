@@ -7,6 +7,7 @@ const cors = require('cors')
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
+const quoteRoutes = reequire('./app/routes/quote_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -39,15 +40,23 @@ const app = express()
 
 // set CORS headers on response from this API using the `cors` NPM package
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || `http://localhost:${clientDevPort}` }))
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:7165' }))
 
 // define port for API to run on
-const port = process.env.PORT || serverDevPort
+const port = process.env.PORT || 4741
 
 // this middleware makes it so the client can use the Rails convention
 // of `Authorization: Token token=<token>` OR the Express convention of
 // `Authorization: Bearer <token>`
-app.use(replaceToken)
+app.use((req, res, next) => {
+  if (req.headers.authorization) {
+    const auth = req.headers.authorization
+    // if we find the Rails pattern in the header, replace it with the Express
+    // one before `passport` gets a look at the headers
+    req.headers.authorization = auth.replace('Token token=', 'Bearer ')
+  }
+  next()
+})
 
 // register passport authentication middleware
 app.use(auth)
@@ -65,6 +74,7 @@ app.use(requestLogger)
 // register route files
 app.use(exampleRoutes)
 app.use(userRoutes)
+app.use(quoteRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
