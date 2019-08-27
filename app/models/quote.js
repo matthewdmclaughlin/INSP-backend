@@ -1,14 +1,11 @@
 const mongoose = require('mongoose')
 
-const exampleSchema = new mongoose.Schema({
-  Quote: {
+const quoteSchema = new mongoose.Schema({
+  quote: {
     type: String,
     required: true
   },
-  quote_id: {
-  type: int,
-  required: true
-},
+  
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -18,4 +15,4 @@ const exampleSchema = new mongoose.Schema({
   timestamps: true
 })
 
-module.exports = mongoose.model('Quote', exampleSchema)
+module.exports = mongoose.model('Quote', quoteSchema)

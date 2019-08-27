@@ -31,8 +31,7 @@ const clientDevPort = 7165
 // use createIndex instead of deprecated ensureIndex
 mongoose.Promise = global.Promise
 mongoose.connect(db, {
-  useNewUrlParser: true,
-  useCreateIndex: true
+  useMongoClient: true
 })
 
 // instantiate express application object
