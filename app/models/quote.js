@@ -5,7 +5,7 @@ const quoteSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  
+
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -15,4 +15,6 @@ const quoteSchema = new mongoose.Schema({
   timestamps: true
 })
 
-module.exports = mongoose.model('Quote', quoteSchema)
+const Quote = mongoose.model('Quote', quoteSchema)
+
+module.exports = Quote

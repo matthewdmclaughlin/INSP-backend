@@ -26,7 +26,7 @@ const router = express.Router()
 
 // INDEX
 // GET /examples
-router.get('/quotes', (req, res) => {
+router.get('/quotes', (req, res, next) => {
   Quote.find()
     .then(quote => {
       return quotes.map(quote => quote.toObject())
@@ -39,7 +39,7 @@ router.get('/quotes', (req, res) => {
 
 // SHOW
 // GET /examples/5a7db6c74d55bc51bdf39793
-router.get('/quotes/:id', (req, res) => {
+router.get('/quotes/:id', (req, res, next) => {
   // req.params.id will be set based on the `:id` in the route
   Quote.findById(req.params.id)
     .then(handle404)
@@ -51,7 +51,7 @@ router.get('/quotes/:id', (req, res) => {
 
 // CREATE
 // POST /examples
-router.post('/quotes', requireToken, (req, res) => {
+router.post('/quotes', requireToken, (req, res, next) => {
   // set owner of new example to be current user
   req.body.quote.owner = req.user.id
 
@@ -68,7 +68,7 @@ router.post('/quotes', requireToken, (req, res) => {
 
 // UPDATE
 // PATCH /examples/5a7db6c74d55bc51bdf39793
-router.patch('/quotes/:id', requireToken, (req, res) => {
+router.patch('/quotes/:id', requireToken, (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
   delete req.body.quote.owner
@@ -91,7 +91,7 @@ router.patch('/quotes/:id', requireToken, (req, res) => {
 
 // DESTROY
 // DELETE /examples/5a7db6c74d55bc51bdf39793
-router.delete('/quotes/:id', requireToken, (req, res) => {
+router.delete('/quotes/:id', requireToken, (req, res, next) => {
   Quote.findById(req.params.id)
     .then(handle404)
     .then(quote => {
