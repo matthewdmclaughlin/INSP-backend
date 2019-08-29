@@ -26,15 +26,15 @@ const router = express.Router()
 
 // INDEX
 // GET /examples
-router.get('/quotes', (req, res, next) => {
-  Quote.find()
-    .then(quote => {
+router.get('/quotes', requireToken, (req, res, next) => {
+  Quote.find({ owner: req.user._id })
+    .then(quotes => {
       return quotes.map(quote => quote.toObject())
     })
     // respond with status 200 and JSON of the examples
     .then(quotes => res.status(200).json({ quotes: quotes }))
     // if an error occurs, pass it to the handler
-    .catch(err => handle(err, res)
+    .catch(next)
 })
 
 // SHOW
@@ -46,7 +46,7 @@ router.get('/quotes/:id', (req, res, next) => {
     // if `findById` is succesful, respond with 200 and "example" JSON
     .then(quote => res.status(200).json({ quote: quote.toObject() }))
     // if an error occurs, pass it to the handler
-    .catch(err => handle(err, res))
+    .catch(next)
 })
 
 // CREATE
@@ -63,7 +63,7 @@ router.post('/quotes', requireToken, (req, res, next) => {
     // if an error occurs, pass it off to our error handler
     // the error handler needs the error message and the `res` object so that it
     // can send an error message back to the client
-    .catch(err => handle(err, res))
+    .catch(next)
 })
 
 // UPDATE
@@ -72,7 +72,7 @@ router.patch('/quotes/:id', requireToken, (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
   delete req.body.quote.owner
-
+console.log(req.body, req.user)
   Quote.findById(req.params.id)
     .then(handle404)
     .then(quote => {
@@ -86,7 +86,7 @@ router.patch('/quotes/:id', requireToken, (req, res, next) => {
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
     // if an error occurs, pass it to the handler
-    .catch(err => handle(err, res))
+    .catch(next)
 })
 
 // DESTROY
@@ -103,7 +103,7 @@ router.delete('/quotes/:id', requireToken, (req, res, next) => {
     // send back 204 and no content if the deletion succeeded
     .then(() => res.sendStatus(204))
     // if an error occurs, pass it to the handler
-    .catch(err => handle(err, res))
+    .catch(next)
 })
 
 module.exports = router
