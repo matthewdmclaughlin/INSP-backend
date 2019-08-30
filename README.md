@@ -2,9 +2,9 @@
 **Welcome to Quote City!** This is the place to come when you want to catalog a great quote you heard.  Create an account and you'll be able to upload your own quotes. Once you're logged in, click the Show My Quotes button to see your submissions and feel free to edit and delete at your leisure.
 
 #### SETUP STEPS
-1.) Fork and clone this repository
-2.) Run `nmp install` to install dependencies.
-3.) Run `npm run server` to spin up the server
+1. Fork and clone this repository
+2. Run `nmp install` to install dependencies.
+3. Run `npm run server` to spin up the server
 
 #### IMPORTANT LINKS
 
